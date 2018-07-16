@@ -9,18 +9,14 @@ function count_same_elements(collection) {
 }
 
 function countNumber(c, results) {
-  let key = c;
-  let count = 1;
-  if (c.includes('-')) {
-    key = c.split('-')[0];
-    count = parseInt(c.split('-')[1]);
-  }
-  let result = results.find(re => re.key === key);
+  const {name, summary = 1} = formatString(c);
+
+  let result = results.find(re => re.name === name);
 
   if (result) {
-    result.count += count;
+    result.summary += summary;
   } else {
-    result = {key: key, count: count};
+    result = {name, summary};
     results.push(result);
   }
 
@@ -28,7 +24,17 @@ function countNumber(c, results) {
 }
 
 function formatString(str) {
-  return
+  const strs = str.split('');
+  const name = strs[0];
+  let numberStr = "";
+  for (let s of strs) {
+    const reg = new RegExp('^\\d$');
+    if (reg.test(s)) {
+      numberStr += s;
+    }
+  }
+
+  return {name, summary: parseInt(numberStr, 10) ? parseInt(numberStr, 10) : 1};
 }
 
 module.exports = count_same_elements;
